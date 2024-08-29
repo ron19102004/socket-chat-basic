@@ -37,10 +37,14 @@ public class EmojiComponent extends JFrame {
     private void view() {
         Path path = Paths.get("");
         String currentDir = path.toAbsolutePath().toString();
-        File fileCurrent = new File(currentDir);
-        String parentDir = fileCurrent.getParent();
-        File folder = new File(parentDir+"/emoji");
+        File folder = new File(currentDir+"/emoji/");
         if (folder.exists() && folder.isDirectory()) {
+            if (!folder.canRead()) {
+                SwingUtilities.invokeLater(() -> {
+                    new ToastMessage("Not permission read file emoji", 10);
+                });
+                return;
+            }
             File[] files = folder.listFiles();
             if (files != null) {
                 JPanel body = new JPanel(new GridLayout((files.length / 3) + 1, 3, 10, 10));
@@ -48,7 +52,6 @@ public class EmojiComponent extends JFrame {
                 scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                 for (File file : files) {
                     if (file.isFile()) {
-                        System.out.println(file.getAbsolutePath());
                         ImageIcon imageIcon = ImageIconComponent.fromAssets(file.getAbsolutePath(), 100, 100);
                         JButton btn = new JButton(imageIcon);
                         btn.setBorderPainted(false);
@@ -63,6 +66,10 @@ public class EmojiComponent extends JFrame {
                 }
                 this.add(scrollPane, BorderLayout.CENTER);
             }
+        } else {
+            SwingUtilities.invokeLater(() -> {
+                new ToastMessage("Error load folder emoji", 10);
+            });
         }
     }
 }
