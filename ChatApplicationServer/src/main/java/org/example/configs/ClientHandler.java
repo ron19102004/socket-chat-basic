@@ -39,9 +39,13 @@ public class ClientHandler implements Runnable {
                 .action("system")
                 .status(true)
                 .build());
+        this.all(ResponseBuilder.builder()
+                .message(String.valueOf(ServerConfiguration.getClients().size()))
+                .action("clients-online")
+                .status(true)
+                .build());
         System.out.println("Client connected: " + this.username);
     }
-
     @Override
     public void run() {
         try {
@@ -79,6 +83,11 @@ public class ClientHandler implements Runnable {
                 .action("system")
                 .status(true)
                 .build());
+        this.all(ResponseBuilder.builder()
+                .message(String.valueOf(ServerConfiguration.getClients().size()))
+                .action("clients-online")
+                .status(true)
+                .build());
         ServerConfiguration.removeClientOutOfClients(this);
         System.out.println("Client close: " + this.username);
 
@@ -89,7 +98,15 @@ public class ClientHandler implements Runnable {
         this.writer.newLine();
         this.writer.flush();
     }
-
+    public void all(Response response) {
+        ServerConfiguration.getClients().forEach(clientHandler -> {
+            try {
+                clientHandler.send(response);
+            } catch (IOException e) {
+                System.out.println("Error:" + e.getMessage());
+            }
+        });
+    }
     public void broadcast(Response response) {
         ServerConfiguration.getClients().forEach(clientHandler -> {
             if (!clientHandler.client.equals(this.client)) {

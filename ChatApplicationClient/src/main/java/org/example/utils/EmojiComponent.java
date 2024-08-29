@@ -47,13 +47,12 @@ public class EmojiComponent extends JFrame {
             }
             File[] files = folder.listFiles();
             if (files != null) {
-                JPanel body = new JPanel(new GridLayout((files.length / 3) + 1, 3, 10, 10));
+                JPanel body = new JPanel(new GridLayout((files.length / 3) + 1, 3, 3, 3));
                 JScrollPane scrollPane = new JScrollPane(body);
                 scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                 for (File file : files) {
                     if (file.isFile()) {
-                        System.out.println(file.getName());
-                        ImageIcon imageIcon = ImageIconComponent.fromAssets(file.getAbsolutePath(), 100, 100);
+                        ImageIcon imageIcon = ImageIconComponent.fromAssets(file.getAbsolutePath(), 110, 110);
                         JButton btn = new JButton(imageIcon);
                         btn.setBorderPainted(false);
                         btn.setHideActionText(true);
