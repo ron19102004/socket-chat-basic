@@ -52,13 +52,14 @@ public class EmojiComponent extends JFrame {
                 scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
                 for (File file : files) {
                     if (file.isFile()) {
+                        System.out.println(file.getName());
                         ImageIcon imageIcon = ImageIconComponent.fromAssets(file.getAbsolutePath(), 100, 100);
                         JButton btn = new JButton(imageIcon);
                         btn.setBorderPainted(false);
                         btn.setHideActionText(true);
                         btn.setContentAreaFilled(false);
                         btn.addActionListener(e -> {
-                            action.action(file.getAbsolutePath());
+                            action.action(file.getName());
                             setVisible(false);
                         });
                         body.add(btn);

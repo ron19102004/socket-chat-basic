@@ -52,13 +52,13 @@ public class ChatView extends JFrame {
         StyledDocument doc = textPane.getStyledDocument();
 
         new Thread(() -> {
-            emojiComponent = new EmojiComponent(pathEmoji -> {
+            emojiComponent = new EmojiComponent(nameFile -> {
                 try {
                     clientApplication.send(RequestBuilder.builder()
                             .action("send-chat-emoji")
-                            .data(pathEmoji)
+                            .data(nameFile)
                             .build());
-                    ImageIcon img = ImageIconComponent.fromAssets(pathEmoji, 100, 100);
+                    ImageIcon img = ImageIconComponent.fromAssets(ImageIconComponent.getPathWithNameFile(nameFile), 100, 100);
                     try {
                         Style usernameStyle = doc.addStyle("usernameStyle", null);
                         StyleConstants.setForeground(usernameStyle, primaryColor);
@@ -117,7 +117,7 @@ public class ChatView extends JFrame {
                     }
                     case "send-chat-emoji" -> {
                         String[] messRes = response.getMessage().split("&");
-                        ImageIcon emoji = ImageIconComponent.fromAssets(messRes[1], 100, 100);
+                        ImageIcon emoji = ImageIconComponent.fromAssets(ImageIconComponent.getPathWithNameFile(messRes[1]), 100, 100);
                         try {
                             doc.insertString(doc.getLength(), space + messRes[0] + "\n", usernameStyle);
                             Style style = doc.addStyle("imageStyle", null);
